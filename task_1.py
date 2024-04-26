@@ -14,5 +14,3 @@ with open('data.txt', 'r') as file:
         color_counts['Green'] += green
 
 print("Red={}, Yellow={}, Green={}".format(color_counts['Red'], color_counts['Yellow'], color_counts['Green']))
-
-
