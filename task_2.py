@@ -1,10 +1,16 @@
 """
-Calculate and print the total duration of each color from the data file.
+Task 2: Find how long each color was active for.
 
 This script reads data from a file and calculates the total duration
 of each color (Red, Yellow, and Green) being active. It then prints
 the calculated durations for each color.
 
+Input:
+- The data file 'data.txt' containing comma-separated values representing
+  the occurrences of each color and their corresponding active durations.
+
+Output:
+- Total duration of each color (Red, Yellow, Green) being active printed to the console.
 """
 
 import datetime

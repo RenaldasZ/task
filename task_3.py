@@ -1,11 +1,20 @@
 """
-Extract and save all times when the Green signal was active from a data file.
+Task 3: Extract and save all times when Green was active from a data file.
 
 This script reads data from a file and extracts all the times when the Green
 signal was active. It then saves these times to a file named 'green_active_times.txt'.
 If no times when the Green signal was active are found, it prints a message indicating
 that.
 
+Input:
+- The data file 'data.txt' containing comma-separated values representing
+  the occurrences of each color, their corresponding active durations,
+  and the time of each occurrence.
+
+Output:
+- A file named 'green_active_times.txt' containing all the times when
+  the Green signal was active. If no such times are found, a message
+  indicating that is printed to the console.
 """
 
 import datetime

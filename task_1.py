@@ -1,9 +1,15 @@
 """
-Count the occurrences of red, yellow, and green in the data file.
+Task 1: Find the number of red, yellow & green occurrences.
 
 This script reads data from a file and counts the occurrences of each color
-(Red, Yellow, and Green). It then prints the counts for each color.
+(Red, Yellow, and Green) in the data. It then prints the counts for each color.
 
+Input:
+- The data file 'data.txt' containing comma-separated values representing
+  the occurrences of each color.
+
+Output:
+- Counts of each color (Red, Yellow, Green) printed to the console.
 """
 
 # Initialize counters for each color
