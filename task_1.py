@@ -1,12 +1,20 @@
-# Find the number of red, yellow & green occurrences.
+"""
+Count the occurrences of red, yellow, and green in the data file.
 
+This script reads data from a file and counts the occurrences of each color
+(Red, Yellow, and Green). It then prints the counts for each color.
+
+"""
+
+# Initialize counters for each color
 color_counts = {'Red': 0, 'Yellow': 0, 'Green': 0}
 
+# Open the data file
 with open('data.txt', 'r') as file:
     next(file)
     # Iterate through each line in the file
     for line in file:
-        # Each line splited into its components and separated by comma
+        # Split each line into its components
         red, yellow, green, *_ = map(int, line.strip().split(',')[:3])
         # Update the counters
         color_counts['Red'] += red
