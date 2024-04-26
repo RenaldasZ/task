@@ -36,3 +36,11 @@ Output:
 `Green was active 3996 times. Green Timings are saved in green_active_times.txt file`
 
 
+## Task 4: Count the number of complete cycles in the data.
+
+This script reads data from a file and counts the number of complete cycles,
+where a cycle is defined as the sequence: Red-Yellow-Green-Yellow-Red.
+
+Output:
+
+`Number of complete cycles:  3263`
