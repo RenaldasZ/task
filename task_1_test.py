@@ -20,7 +20,8 @@ class TestColorCount(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 
+# .
 # ----------------------------------------------------------------------
-# Ran 1 test in 0.016s
+# Ran 1 test in 0.017s
 
 # OK

@@ -38,7 +38,8 @@ class TestCompleteCycles(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 
+# .
 # ----------------------------------------------------------------------
-# Ran 1 test in 0.015s
+# Ran 1 test in 0.016s
 
 # OK

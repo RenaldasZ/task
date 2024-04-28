@@ -1,5 +1,5 @@
 """
-Task 3: Extract and save all times when Green was active from a data file.
+Task 3: Find all times when Green was active (by time)
 
 This script reads data from a file and extracts all the times when the Green
 signal was active. It then saves these times to a file named 'green_active_times.txt'.
@@ -17,32 +17,60 @@ Output:
   indicating that is printed to the console.
 """
 
+import os
 import datetime
 
-# Store all times when Green was active
-green_times = []
+def find_green_active_times(file_path):
+    """
+    Find all times when the Green signal was active from the data file.
 
-with open('data.txt', 'r') as file:
-    next(file)
-    for line in file:
-        # Split each line into its components
-        red, yellow, green, time_active_str, time_str = line.strip().split(',')
-        # Convert time_active_str to int to check if Green was active
-        if int(green):
-            # Extract time from the time_str
-            time = datetime.datetime.strptime(time_str, '%H:%M:%S').time()
-            # Append the time to green_times list
-            green_times.append(time)
+    Args:
+    - file_path (str): The path to the data file.
 
-# Save all times when Green was active to a file
-if green_times:
-    with open('green_active_times.txt', 'w') as output_file:
+    Returns:
+    - list: A list containing all the times when the Green signal was active.
+    """
+    green_times = []
+
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Error: '{file_path}' file not found.")
+
+    with open(file_path, 'r') as file:
+        next(file)
+        for line in file:
+            _, _, green, _, time_str = map(str.strip, line.split(','))
+            if int(green):
+                time = datetime.datetime.strptime(time_str, '%H:%M:%S').time()
+                green_times.append(time)
+
+    return green_times
+
+def save_green_active_times(green_times, output_file_path='green_active_times.txt'):
+    """
+    Save all times when the Green signal was active to a file.
+
+    Args:
+    - green_times (list): A list containing all the times when the Green signal was active.
+    - output_file_path (str): The path to the output file (default is 'green_active_times.txt').
+    """
+    with open(output_file_path, 'w') as output_file:
         for time in green_times:
             output_file.write(str(time) + '\n')
+    print("Times when Green was active saved to", output_file_path)
 
-    # Prints all times when Green was active to terminal
-    print("Times when Green was active:")
-    for time in green_times:
-        print(time)
-else:
-    print("No times when Green was active found in the data.")
+def main():
+    file_path = 'data.txt'
+    try:
+        green_times = find_green_active_times(file_path)
+        for time in green_times:
+          print(time)
+          
+        if green_times:
+            save_green_active_times(green_times)
+        else:
+            print("No times when Green was active found in the data.")
+    except FileNotFoundError as e:
+        print(e)
+
+if __name__ == "__main__":
+    main()
