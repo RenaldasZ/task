@@ -14,7 +14,7 @@ Output: `Red=5:35:18, Yellow=10:15:07, Green=5:03:14`
 
 ---
 
-## Task 3: Extract and save all times when the Green signal was active from a data file.
+## Task 3: Find all times when Green was active (by time)
 
 The script extracts all the times when the Green signal was active from the data file and saves these times to a file named `'green_active_times.txt'`. If no times when the Green signal was active are found, it prints a corresponding message.
 
@@ -22,7 +22,7 @@ Output: `Green was active 3996 times. Green Timings are saved in green_active_ti
 
 ---
 
-## Task 4: Count the number of complete cycles in the data.
+## Task 4: Find the number of complete cycles Red-Yellow-Green-Yellow-Red in the data
 
 This script counts the number of complete cycles in the data, where a cycle is defined as the sequence: Red-Yellow-Green-Yellow-Red.
 
@@ -30,7 +30,7 @@ Output: `Number of complete cycles: 3263`
 
 ---
 
-## Task 5: Count the number of lines with mistakes in the data.
+## Task 5: Find number of lines with mistakes (multiple colours active at the same time or no colours active)
 
 The script counts the number of lines in the data where multiple colors are active at the same time or no colors are active.
 
