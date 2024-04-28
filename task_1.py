@@ -12,43 +12,52 @@ Output:
 - Counts of each color (Red, Yellow, Green) printed to the console.
 """
 
-import os
-
-def count_color_occurrences(file_path):
+def read_color_data(file_path):
     """
-    Count the occurrences of each color in the data file.
-
-    This function encapsulates the logic for reading the data file and counting the occurrences
-    of each color (Red, Yellow, and Green).
+    Read color data from the file.
 
     Args:
     - file_path (str): The path to the data file.
+
+    Returns:
+    - list: A list containing the color data from the file.
+    """
+    color_data = []
+
+    try:
+        with open(file_path, 'r') as file:
+            next(file)
+            for line in file:
+                color_data.append(tuple(map(int, line.strip().split(',')[:3])))
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Error: '{file_path}' file not found or it is corrupted.")
+    except Exception as e:
+        raise RuntimeError(f"An error occurred while reading the file: {e}")
+
+    return color_data
+
+def count_color_occurrences(color_data):
+    """
+    Count the occurrences of each color in the data.
+
+    Args:
+    - color_data (list): A list containing the color data.
 
     Returns:
     - dict: A dictionary containing the counts of each color.
     """
     color_counts = {'Red': 0, 'Yellow': 0, 'Green': 0}
 
-    if not os.path.exists(file_path):
-        print(f"Error: '{file_path}' file not found or it is corrupted.")
-        return color_counts
-
-    with open(file_path, 'r') as file:
-        next(file)
-        for line in file:
-            red, yellow, green, *_ = map(int, line.strip().split(',')[:3])
-            color_counts['Red'] += red
-            color_counts['Yellow'] += yellow
-            color_counts['Green'] += green
+    for red, yellow, green in color_data:
+        color_counts['Red'] += red
+        color_counts['Yellow'] += yellow
+        color_counts['Green'] += green
 
     return color_counts
 
 def print_color_counts(color_counts):
     """
     Print the counts of each color.
-
-    This function encapsulates the logic for printing the counts of each color (Red, Yellow, and Green)
-    to the console.
 
     Args:
     - color_counts (dict): A dictionary containing the counts of each color.
@@ -61,8 +70,14 @@ def print_color_counts(color_counts):
 
 def main():
     file_path = 'data.txt'
-    color_counts = count_color_occurrences(file_path)
-    print_color_counts(color_counts)
+    try:
+        color_data = read_color_data(file_path)
+        color_counts = count_color_occurrences(color_data)
+        print_color_counts(color_counts)
+    except FileNotFoundError as e:
+        print(e)
+    except RuntimeError as e:
+        print(e)
 
 if __name__ == "__main__":
     main()

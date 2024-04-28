@@ -44,23 +44,28 @@ def count_complete_cycles(file_path):
 
             # Iterate through the rest of the lines
             for line in file:
-                # Split each line into its components
-                red, yellow, green, *_ = map(int, line.strip().split(',')[:3])
+                try:
+                    # Split each line into its components
+                    red, yellow, green, *_ = map(int, line.strip().split(',')[:3])
 
-                # Check if the current line completes the cycle
-                current_line_completes_cycle = (
-                    red == 0 and yellow == 1 and green == 0 and
-                    prev_line[0] == 1 and prev_line[1] == 0 and prev_line[2] == 0 and
-                    prev_prev_line[0] == 0 and prev_prev_line[1] == 1 and prev_prev_line[2] == 0
-                )
+                    # Check if the current line completes the cycle
+                    current_line_completes_cycle = (
+                        red == 0 and yellow == 1 and green == 0 and
+                        prev_line[0] == 1 and prev_line[1] == 0 and prev_line[2] == 0 and
+                        prev_prev_line[0] == 0 and prev_prev_line[1] == 1 and prev_prev_line[2] == 0
+                    )
 
-                # If the current line completes the cycle, increment the cycle count
-                if current_line_completes_cycle:
-                    cycles_count += 1
+                    # If the current line completes the cycle, increment the cycle count
+                    if current_line_completes_cycle:
+                        cycles_count += 1
 
-                # Update the previous lines for the next iteration
-                prev_prev_line = prev_line
-                prev_line = [red, yellow, green]
+                    # Update the previous lines for the next iteration
+                    prev_prev_line = prev_line
+                    prev_line = [red, yellow, green]
+
+                except (ValueError, IndexError):
+                    # Handle exceptions that may occur due to invalid or incomplete lines
+                    print("Warning: Skipping invalid line.")
 
         except FileNotFoundError as e:
             print(e)
@@ -77,3 +82,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    

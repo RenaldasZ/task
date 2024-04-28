@@ -13,37 +13,53 @@ Output:
 - Total duration of each color (Red, Yellow, Green) being active printed to the console.
 """
 
-import os
 import datetime
 
-def calculate_color_durations(file_path):
+def read_color_data(file_path):
+    """
+    Read color data from the file.
+
+    Args:
+    - file_path (str): The path to the data file.
+
+    Returns:
+    - list: A list of tuples containing color data.
+    """
+    color_data = []
+
+    try:
+        with open(file_path, 'r') as file:
+            next(file)
+            for line in file:
+                color_data.append(line.strip().split(','))
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Error: '{file_path}' file not found or it is corrupted.")
+    except Exception as e:
+        raise RuntimeError(f"An error occurred while reading the file: {e}")
+
+    return color_data
+
+def calculate_color_durations(color_data):
     """
     Calculate the total duration of each color being active.
 
     Args:
-    - file_path (str): The path to the data file.
+    - color_data (list): A list of tuples containing color data.
 
     Returns:
     - dict: A dictionary containing the total duration of each color.
     """
     color_durations = {'Red': datetime.timedelta(), 'Yellow': datetime.timedelta(), 'Green': datetime.timedelta()}
 
-    if not os.path.exists(file_path):
-        print(f"Error: '{file_path}' file not found or it is corrupted.")
-        return color_durations
-
-    with open(file_path, 'r') as file:
-        next(file)
-        for line in file:
-            red, yellow, green, time_active_str, *_ = line.strip().split(',')
-            time_active = datetime.timedelta(seconds=int(time_active_str))
-            
-            if int(red):
-                color_durations['Red'] += time_active
-            elif int(yellow):
-                color_durations['Yellow'] += time_active
-            elif int(green):
-                color_durations['Green'] += time_active
+    for red, yellow, green, time_active_str, *_ in color_data:
+        time_active = datetime.timedelta(seconds=int(time_active_str))
+        
+        if int(red):
+            color_durations['Red'] += time_active
+        elif int(yellow):
+            color_durations['Yellow'] += time_active
+        elif int(green):
+            color_durations['Green'] += time_active
 
     return color_durations
 
@@ -59,8 +75,14 @@ def print_color_durations(color_durations):
 
 def main():
     file_path = 'data.txt'
-    color_durations = calculate_color_durations(file_path)
-    print_color_durations(color_durations)
+    try:
+        color_data = read_color_data(file_path)
+        color_durations = calculate_color_durations(color_data)
+        print_color_durations(color_durations)
+    except FileNotFoundError as e:
+        print(e)
+    except RuntimeError as e:
+        print(e)
 
 if __name__ == "__main__":
     main()

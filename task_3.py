@@ -32,11 +32,8 @@ def find_green_active_times(file_path):
     """
     green_times = []
 
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"Error: '{file_path}' file not found.")
-
     with open(file_path, 'r') as file:
-        next(file)
+        next(file) 
         for line in file:
             _, _, green, _, time_str = map(str.strip, line.split(','))
             if int(green):
@@ -53,6 +50,12 @@ def save_green_active_times(green_times, output_file_path='green_active_times.tx
     - green_times (list): A list containing all the times when the Green signal was active.
     - output_file_path (str): The path to the output file (default is 'green_active_times.txt').
     """
+    if os.path.exists(output_file_path):
+        overwrite = input(f"The file '{output_file_path}' already exists. Do you want to overwrite it? (yes/no): ").lower()
+        if overwrite != 'yes':
+            print("Operation aborted.")
+            return
+
     with open(output_file_path, 'w') as output_file:
         for time in green_times:
             output_file.write(str(time) + '\n')
@@ -62,15 +65,12 @@ def main():
     file_path = 'data.txt'
     try:
         green_times = find_green_active_times(file_path)
-        for time in green_times:
-          print(time)
-          
         if green_times:
             save_green_active_times(green_times)
         else:
             print("No times when Green was active found in the data.")
     except FileNotFoundError as e:
-        print(e)
+        print(f"Error: '{file_path}' file not found.")
 
 if __name__ == "__main__":
     main()
