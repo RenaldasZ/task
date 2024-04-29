@@ -28,7 +28,7 @@ def read_color_data(file_path):
         with open(file_path, 'r') as file:
             next(file)
             for line in file:
-                color_data.append(tuple(map(int, line.strip().split(',')[:3])))
+                color_data.append(map(int, line.strip().split(',')[:3]))
     except FileNotFoundError:
         raise FileNotFoundError(f"Error: '{file_path}' file not found or it is corrupted.")
     except Exception as e:
