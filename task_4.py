@@ -3,79 +3,64 @@ Task 4: Find the number of complete cycles Red-Yellow-Green-Yellow-Red in the da
 
 This script reads data from a file and counts the number of complete cycles,
 where a cycle is defined as the sequence: Red-Yellow-Green-Yellow-Red.
-
-Algorithm:
-1. It initializes two variables to count correct and incorrect cycles.
-2. Opens the data file.
-3. Skips the header line.
-4. Reads the first two lines to initialize the previous colors.
-5. Iterates through the rest of the lines:
-   a. Splits each line into its components (Red, Yellow, Green).
-   b. Checks if the current line completes the cycle by comparing colors with previous lines.
-   c. If the current line completes the cycle, it increments the correct cycle count, otherwise increments the incorrect cycle count.
-   d. Updates the previous lines for the next iteration.
-6. Prints the total number of correct and incorrect cycles.
-
 """
 
-import os
-
-def count_cycles(file_path):
+def read_color_data(file_path):
     """
-    Count the number of correct and incorrect cycles in the data file.
+    Read color data from a file.
 
     Args:
-    - file_path (str): The path to the data file.
+        file_path (str): The path to the file containing color data.
 
     Returns:
-    - tuple: A tuple containing the counts of correct cycles and incorrect cycles.
+        list: A list of color sequences extracted from the file.
     """
-    correct_cycles_count = 0
-    incorrect_cycles_count = 0
-
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"Error: '{file_path}' file not found.")
+    color_sequences = []
+    current_sequence = []
+    last_color = None
 
     with open(file_path, 'r') as file:
-        next(file)  # Skip header
-        try:
-            # Read the first two lines to initialize the previous colors
-            _, _, prev_prev_green = map(int, next(file).strip().split(',')[:3])
-            _, _, prev_green = map(int, next(file).strip().split(',')[:3])
+        lines = file.readlines()
 
-            # Iterate through the rest of the lines
-            for line in file:
-                try:
-                    # Split each line into its components
-                    _, _, current_green, *_ = map(int, line.strip().split(',')[:3])
+    # Process each line to extract color sequences
+    for line in lines[1:]:
+        row = line.strip().split(',')
+        color = 'Red' if int(row[0]) == 1 else 'Yellow' if int(row[1]) == 1 else 'Green'
+        if color == last_color:
+            current_sequence.append(color)
+        else:
+            if current_sequence:
+                color_sequences.append(current_sequence)
+            current_sequence = [color]
+            last_color = color
 
-                    # Check if the current line completes the cycle
-                    if prev_prev_green == 0 and prev_green == 1 and current_green == 0:
-                        correct_cycles_count += 1
-                    else:
-                        incorrect_cycles_count += 1
+    # Add the last sequence
+    if current_sequence:
+        color_sequences.append(current_sequence)
 
-                    # Update the previous colors for the next iteration
-                    prev_prev_green = prev_green
-                    prev_green = current_green
+    return color_sequences
 
-                except (ValueError, IndexError):
-                    # Handle exceptions that may occur due to invalid or incomplete lines
-                    print("Warning: Skipping invalid line.")
 
-        except FileNotFoundError as e:
-            print(e)
+def count_correct_cycles(color_sequences):
+    """
+    Count the number of correct cycles in a list of color sequences.
 
-    return correct_cycles_count, incorrect_cycles_count
+    Args:
+        color_sequences (list): A list of color sequences.
 
-def main():
-    file_path = 'data.txt'
-    try:
-        correct_cycles_count, incorrect_cycles_count = count_cycles(file_path)
-        print("Number of correct cycles: ", correct_cycles_count)
-        print("Number of incorrect cycles: ", incorrect_cycles_count)
-    except FileNotFoundError as e:
-        print(e)
+    Returns:
+        int: The number of correct cycles found.
+    """
+    correct_cycles = 0
+
+    for sequence in color_sequences:
+        if len(sequence) >= 2 and sequence[0] == sequence[-1]:
+            correct_cycles += 1
+
+    return correct_cycles
 
 if __name__ == "__main__":
-    main()
+    file_path = 'data.txt'
+    color_sequences = read_color_data(file_path)
+    correct_cycles = count_correct_cycles(color_sequences)
+    print("Number of Correct Cycles:", correct_cycles)
