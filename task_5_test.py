@@ -1,42 +1,34 @@
 import unittest
-
-def count_lines_with_mistakes(filename):
-    """
-    Count the number of lines with mistakes in the data.
-
-    This function reads data from a file and counts the number of lines where multiple colors
-    are active at the same time or no colors are active.
-
-    Parameters:
-        filename (str): The name of the file containing the data.
-
-    Returns:
-        int: The total number of lines with mistakes.
-    """
-
-    mistakes_count = 0
-
-    with open(filename, 'r') as file:
-        next(file)
-        
-        for line in file:
-            red, yellow, green, *_ = map(int, line.strip().split(',')[:3])
-            
-            # Check if multiple colors are active or no colors are active
-            if (red + yellow + green) != 1:
-                mistakes_count += 1
-
-    return mistakes_count
+from task_5 import count_lines_with_mistakes
 
 class TestCountLinesWithMistakes(unittest.TestCase):
-    def test_count_lines_with_mistakes(self):
-        self.assertEqual(count_lines_with_mistakes('data.txt'), 671)
+    def setUp(self):
+        self.valid_file_path = 'data.txt'
+
+    def test_count_lines_with_mistakes_valid_file(self):
+        mistakes_count = count_lines_with_mistakes(self.valid_file_path)
+        self.assertEqual(mistakes_count, 671)
+
+    def test_count_lines_with_mistakes_invalid_file(self):
+        invalid_file_path = 'invalid_data.txt'
+
+        with open(self.valid_file_path, 'r') as valid_file, open(invalid_file_path, 'w') as invalid_file:
+
+            header = valid_file.readline()
+            invalid_file.write(header)
+
+            for line_number, line in enumerate(valid_file, start=1):
+                try:
+                    red, yellow, green, *_ = map(int, line.strip().split(',')[:3])
+                    if (red + yellow + green) != 1:
+                        # Write the line to the new file if there's a mistake
+                        invalid_file.write(line)
+                except (ValueError, IndexError):
+                    print(f"Warning: Invalid data format in line {line_number}. Skipping.")
+
+        # Count mistakes in the new file
+        mistakes_count = count_lines_with_mistakes(invalid_file_path)
+        self.assertEqual(mistakes_count, 671)
 
 if __name__ == '__main__':
     unittest.main()
-
-# .
-# ----------------------------------------------------------------------
-# Ran 1 test in 0.014s
-
-# OK
