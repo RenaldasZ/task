@@ -1,45 +1,34 @@
 import unittest
+from task_4 import read_color_data, count_correct_cycles
 
-def count_complete_cycles(filename):
-    cycles_count = 0
+class TestColorSequences(unittest.TestCase):
+    def setUp(self):
+        self.file_path = 'data.txt'
 
-    with open(filename, 'r') as file:
-        next(file)
+    def test_read_color_data(self):
+        color_sequences = read_color_data(self.file_path)
+        self.assertIsInstance(color_sequences, list)
+        self.assertTrue(len(color_sequences) > 0)
 
-        prev_prev_line = list(map(int, next(file).strip().split(',')[:3]))
-        prev_line = list(map(int, next(file).strip().split(',')[:3]))
+    def test_count_correct_cycles(self):
+        color_sequences = [['Red', 'Yellow', 'Green', 'Yellow', 'Red'], ['Red', 'Yellow', 'Green', 'Yellow', 'Red']]
+        correct_cycles = count_correct_cycles(color_sequences)
+        self.assertEqual(correct_cycles, 2)
 
-        for line in file:
-            red, yellow, green, *_ = map(int, line.strip().split(',')[:3])
+    def test_count_correct_cycles_empty_list(self):
+        color_sequences = []
+        correct_cycles = count_correct_cycles(color_sequences)
+        self.assertEqual(correct_cycles, 0)
 
-            current_line_completes_cycle = (
-                red == 0 and yellow == 1 and green == 0 and
-                prev_line[0] == 1 and prev_line[1] == 0 and prev_line[2] == 0 and
-                prev_prev_line[0] == 0 and prev_prev_line[1] == 1 and prev_prev_line[2] == 0
-            )
+    def test_count_correct_cycles_single_sequence(self):
+        color_sequences = [['Red', 'Yellow', 'Green', 'Yellow', 'Red', 'Green']]
+        correct_cycles = count_correct_cycles(color_sequences)
+        self.assertEqual(correct_cycles, 0)
 
-            if current_line_completes_cycle:
-                cycles_count += 1
-
-            prev_prev_line = prev_line
-            prev_line = [red, yellow, green]
-
-    return cycles_count
-
-class TestCompleteCycles(unittest.TestCase):
-    def test_count_complete_cycles(self):
-        # expected result
-        expected_cycles_count = 3263
-        # function called with the data file path
-        actual_cycles_count = count_complete_cycles('data.txt')
-        # actual result check
-        self.assertEqual(expected_cycles_count, actual_cycles_count)
+    def test_count_correct_cycles_no_cycles(self):
+        color_sequences = [['Red', 'Yellow', 'Green', 'Yellow', 'Green']]
+        correct_cycles = count_correct_cycles(color_sequences)
+        self.assertEqual(correct_cycles, 0)
 
 if __name__ == '__main__':
     unittest.main()
-
-# .
-# ----------------------------------------------------------------------
-# Ran 1 test in 0.016s
-
-# OK
