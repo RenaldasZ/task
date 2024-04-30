@@ -37,7 +37,7 @@ def read_color_data(file_path):
     # Add the last sequence
     if current_sequence:
         color_sequences.append(current_sequence)
-
+    # print(color_sequences)
     return color_sequences
 
 
@@ -59,8 +59,14 @@ def count_correct_cycles(color_sequences):
 
     return correct_cycles
 
-if __name__ == "__main__":
+def main():
     file_path = 'data.txt'
-    color_sequences = read_color_data(file_path)
-    correct_cycles = count_correct_cycles(color_sequences)
-    print("Number of Correct Cycles:", correct_cycles)
+    try:
+        color_sequences = read_color_data(file_path)
+        correct_cycles = count_correct_cycles(color_sequences)
+        print("Number of Correct Cycles:", correct_cycles)
+    except FileNotFoundError as e:
+        print(f"Error: '{file_path}' file not found.")
+
+if __name__ == "__main__":
+    main()
