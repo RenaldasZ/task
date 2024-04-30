@@ -1,27 +1,49 @@
 import unittest
+from task_1 import read_color_data, count_color_occurrences
 
-def count_colors(filename):
-    color_counts = {'Red': 0, 'Yellow': 0, 'Green': 0}
-    with open(filename, 'r') as file:
-        next(file)
-        for line in file:
-            red, yellow, green, *_ = map(int, line.strip().split(',')[:3])
-            color_counts['Red'] += red
-            color_counts['Yellow'] += yellow
-            color_counts['Green'] += green
-    return color_counts
+class TestColorOccurrences(unittest.TestCase):
+    def setUp(self):
+        self.file_path = 'data.txt'
 
-class TestColorCount(unittest.TestCase):
-    def test_count_colors(self):
-        expected_counts = {'Red': 4020, 'Yellow': 7655, 'Green': 3996}
-        actual_counts = count_colors('data.txt')
-        self.assertEqual(expected_counts, actual_counts)
+    def test_read_color_data(self):
+        color_data = read_color_data(self.file_path)
+        self.assertIsInstance(color_data, list)
+        self.assertTrue(len(color_data) > 0)
+
+    def test_count_color_occurrences(self):
+        color_data = [(1, 0, 0), (0, 1, 0), (0, 0, 1), (1, 1, 1)]
+        color_counts = count_color_occurrences(color_data)
+        self.assertEqual(color_counts['Red'], 2)
+        self.assertEqual(color_counts['Yellow'], 2)
+        self.assertEqual(color_counts['Green'], 2)
+
+    def test_count_color_occurrences_no_data(self):
+        color_data = []
+        color_counts = count_color_occurrences(color_data)
+        self.assertEqual(color_counts['Red'], 0)
+        self.assertEqual(color_counts['Yellow'], 0)
+        self.assertEqual(color_counts['Green'], 0)
+
+    def test_count_color_occurrences_only_red(self):
+        color_data = [(1, 0, 0), (1, 0, 0), (1, 0, 0)]
+        color_counts = count_color_occurrences(color_data)
+        self.assertEqual(color_counts['Red'], 3)
+        self.assertEqual(color_counts['Yellow'], 0)
+        self.assertEqual(color_counts['Green'], 0)
+
+    def test_count_color_occurrences_only_yellow(self):
+        color_data = [(0, 1, 0), (0, 1, 0), (0, 1, 0)]
+        color_counts = count_color_occurrences(color_data)
+        self.assertEqual(color_counts['Red'], 0)
+        self.assertEqual(color_counts['Yellow'], 3)
+        self.assertEqual(color_counts['Green'], 0)
+
+    def test_count_color_occurrences_only_green(self):
+        color_data = [(0, 0, 1), (0, 0, 1), (0, 0, 1)]
+        color_counts = count_color_occurrences(color_data)
+        self.assertEqual(color_counts['Red'], 0)
+        self.assertEqual(color_counts['Yellow'], 0)
+        self.assertEqual(color_counts['Green'], 3)
 
 if __name__ == '__main__':
     unittest.main()
-
-# .
-# ----------------------------------------------------------------------
-# Ran 1 test in 0.017s
-
-# OK
