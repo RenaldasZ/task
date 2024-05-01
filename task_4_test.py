@@ -1,34 +1,48 @@
 import unittest
-from task_4 import read_color_data, count_correct_cycles
 
-class TestColorSequences(unittest.TestCase):
-    def setUp(self):
-        self.file_path = 'data.txt'
+def is_complete_cycle(line, next_line, next_next_line, next_next_next_line, next_next_next_next_line):
+    colors = line.strip().split(",")[:3]
+    next_colors = next_line.strip().split(",")[:3]
+    next_next_colors = next_next_line.strip().split(",")[:3]
+    next_next_next_colors = next_next_next_line.strip().split(",")[:3]
+    next_next_next_next_colors = next_next_next_next_line.strip().split(",")[:3]
+    return (colors == ['1', '0', '0'] and
+            next_colors == ['0', '1', '0'] and
+            next_next_colors == ['0', '0', '1'] and
+            next_next_next_colors == ['0', '1', '0'] and
+            next_next_next_next_colors == ['1', '0', '0'])
 
-    def test_read_color_data(self):
-        color_sequences = read_color_data(self.file_path)
-        self.assertIsInstance(color_sequences, list)
-        self.assertTrue(len(color_sequences) > 0)
+def count_complete_cycles(lines):
+    complete_cycles = 0
+    for i in range(len(lines)-4):
+        if is_complete_cycle(lines[i], lines[i+1], lines[i+2], lines[i+3], lines[i+4]):
+            complete_cycles += 1
+    return complete_cycles
 
-    def test_count_correct_cycles(self):
-        color_sequences = [['Red', 'Yellow', 'Green', 'Yellow', 'Red'], ['Red', 'Yellow', 'Green', 'Yellow', 'Red']]
-        correct_cycles = count_correct_cycles(color_sequences)
-        self.assertEqual(correct_cycles, 2)
+class TestCompleteCycles(unittest.TestCase):
+    def test_is_complete_cycle(self):
+        line1 = "1,0,0,7,0:00:07\n"
+        line2 = "0,1,0,7,0:00:14\n"
+        line3 = "0,0,1,9,0:00:23\n"
+        line4 = "0,1,0,1,0:00:24\n"
+        line5 = "1,0,0,1,0:00:25\n"
 
-    def test_count_correct_cycles_empty_list(self):
-        color_sequences = []
-        correct_cycles = count_correct_cycles(color_sequences)
-        self.assertEqual(correct_cycles, 0)
+        self.assertTrue(is_complete_cycle(line1, line2, line3, line4, line5))
 
-    def test_count_correct_cycles_single_sequence(self):
-        color_sequences = [['Red', 'Yellow', 'Green', 'Yellow', 'Red', 'Green']]
-        correct_cycles = count_correct_cycles(color_sequences)
-        self.assertEqual(correct_cycles, 0)
+    def test_count_complete_cycles(self):
+        lines = [
+            "1,0,0,7,0:00:07\n",
+            "0,1,0,7,0:00:14\n",
+            "0,0,1,9,0:00:23\n",
+            "0,1,0,1,0:00:24\n",
+            "1,0,0,1,0:00:25\n",
+            "0,1,0,7,0:00:14\n",
+            "0,0,1,9,0:00:23\n",
+            "0,1,0,1,0:00:24\n",
+            "1,0,0,1,0:00:25\n"
+        ]
 
-    def test_count_correct_cycles_no_cycles(self):
-        color_sequences = [['Red', 'Yellow', 'Green', 'Yellow', 'Green']]
-        correct_cycles = count_correct_cycles(color_sequences)
-        self.assertEqual(correct_cycles, 0)
+        self.assertEqual(count_complete_cycles(lines), 2)
 
 if __name__ == '__main__':
     unittest.main()
