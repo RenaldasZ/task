@@ -26,7 +26,7 @@ Output: `Green was active 3996 times. Green Timings are saved in green_active_ti
 
 This script counts the number of complete cycles in the data, where a cycle is defined as the sequence: Red-Yellow-Green-Yellow-Red.
 
-Output: `Number of Correct Cycles: 269`
+Output: `Number of complete cycles Red-Yellow-Green-Yellow-Red followed by Red-Green-Yellow-Red: 2989`
 
 ---
 
